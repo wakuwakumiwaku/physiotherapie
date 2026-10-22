@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "positions": 13,
+  "points": 10,
+  "fixedChf": 2,
+  "purchaseCost": 1,
+  "codes": [
+    "7301",
+    "7311",
+    "7313",
+    "7330",
+    "7340",
+    "7350",
+    "7351",
+    "7352",
+    "7353",
+    "7354",
+    "7361",
+    "7362",
+    "7363"
+  ],
+  "sourcePages": 7,
+  "missingRules": 0,
+  "overviewDetailMismatches": 0,
+  "unresolvedCombinationCodes": []
+}

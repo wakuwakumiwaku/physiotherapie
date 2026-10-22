@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "catalogId": "physiotherapie-2026",
+  "retrievedAt": "2026-10-22T03:40:14.585469+00:00",
+  "sources": [
+    {
+      "file": "bag-physiotherapie.html",
+      "url": "https://www.bag.admin.ch/de/leistungen-physiotherapie",
+      "bytes": 788050,
+      "sha256": "34f6a9f5a794e8f2abbd35fa429c92c5937ba646ef482f9720ab57c1ea65a2ad",
+      "title": "Leistungen: Physiotherapie"
+    },
+    {
+      "file": "tarifstruktur-2026.pdf",
+      "url": "https://www.fedlex.admin.ch/filestore/fedlex.data.admin.ch/eli/oce/2025/68/de/pdf-a/fedlex-data-admin-ch-eli-oce-2025-68-de-pdf-a.pdf",
+      "bytes": 139930,
+      "sha256": "d10462e61e5aa6594660dfa6e04d5085aa417caa7f2a54d0c8781e87278936a9",
+      "title": "Anhang: Tarifstruktur für physiotherapeutische Leistungen, gültig ab 1.1.2026",
+      "validFrom": "2026-01-01",
+      "publicationDate": null
+    }
+  ],
+  "versionNote": "Gültig ab 1. Januar 2026; formale Revision. Laut BAG inhaltlich unverändert gegenüber der am 1. Januar 2018 in Kraft getretenen Tarifstruktur. Keine neuen Preise behauptet.",
+  "scope": "Vollständiger Anhang nach Artikel 2 der Verordnung über die Festlegung von Tarifstrukturen in der Krankenversicherung, SR 832.102.5. Ambulante Physiotherapie im KVG-Bereich; keine UV/MV/IV-Tarife.",
+  "rights": {
+    "basis": "Amtlicher Verordnungsanhang; Gesetze, Verordnungen und andere amtliche Erlasse sind nach Art. 5 Abs. 1 Bst. a URG nicht urheberrechtlich geschützt. Veröffentlicht werden abgeleitete normative Tarifdaten und Regeln, keine BAG-Webseitenkopie, Logos oder Drittanbieterinstrumente. Keine amtliche App, keine pauschale Lizenzbehauptung für fremde Inhalte.",
+    "lawUrl": "https://www.fedlex.admin.ch/eli/cc/1993/1798_1798_1798/de#art_5"
+  },
+  "taxPointValue": {
+    "status": "unknown",
+    "note": "Kantonal bzw. vertraglich unterschiedlich; kein verifizierter kantonaler Wert hinterlegt. Ausschliesslich eigene Eingabe in CHF pro Taxpunkt."
+  },
+  "extraction": "pdftotext -layout; sämtliche 13 Übersichtspositionen gegen Detailtabellen geprüft; gemeinsame Regeln 7362/7363 bei beiden Positionen enthalten; PDF-Seiten 1–7.",
+  "publicationDate": null
+}

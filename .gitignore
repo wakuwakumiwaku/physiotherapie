@@ -1,0 +1,17 @@
+sources/
+.local/
+dist/
+.build-*/
+node_modules/
+__pycache__/
+*.py[cod]
+.env
+.env.*
+exports/
+backups/
+*.log
+*.csv
+*.zip
+physiotherapie-sammlung*.json
+physiotherapie-vor-uebernahme*.json
+physiotherapie-gelesener-speicherstand*.txt

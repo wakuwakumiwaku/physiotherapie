@@ -1,0 +1,349 @@
+{
+  "schemaVersion": 1,
+  "id": "physiotherapie-2026",
+  "title": "Tarifstruktur für physiotherapeutische Leistungen",
+  "validFrom": "2026-01-01",
+  "sourceSha256": "d10462e61e5aa6594660dfa6e04d5085aa417caa7f2a54d0c8781e87278936a9",
+  "taxonomy": [
+    {
+      "id": "sessions",
+      "label": "Sitzungspauschalen",
+      "overview": "1.1",
+      "detail": "2"
+    },
+    {
+      "id": "supplements",
+      "label": "Zuschlagspositionen",
+      "overview": "1.2",
+      "detail": "3"
+    },
+    {
+      "id": "incontinence",
+      "label": "Pauschale für Verbrauchs- und Hygienematerial bei der physiotherapeutischen Inkontinenztherapie",
+      "overview": "1.3",
+      "detail": "3, abschliessende Tabelle"
+    }
+  ],
+  "intro": "1. Der Tarif basiert grundsätzlich auf Sitzungspauschalen. Pro Therapiesitzung kann nur eine\nSitzungspauschale (Ziff. 7301–7340) verrechnet werden.\n\n2. Pro Sitzung kann einmal eine der Sitzungspauschalen (Ziff. 7301–7340) verrechnet werden.\nSitzungspauschalen (Ziff. 7301–7340) können nur dann zweimal pro Tag verrechnet werden, wenn\nzwei Behandlungen pro Tag durchgeführt worden sind. Die zwei Behandlungen pro Tag müssen auf\nformelle ärztliche Verordnung erfolgt sein.\n\n3. Auch wenn die im Rahmen einer Therapiesitzung erbrachten Leistungen durch die\nPhysiotherapeutin oder den Physiotherapeuten auf den Tag verteilt werden, darf die\nSitzungspauschale nur einmal verrechnet werden.\n\n4. Die Zuschlagspositionen sind ausschliesslich nach den Kombinationsregeln (Spalte «Erlaubte\nKombinationen») abrechenbar. Andere Kombinationen von Tarifpositionen sind nicht erlaubt.",
+  "introPage": 2,
+  "positions": [
+    {
+      "id": "7301",
+      "code": "7301",
+      "title": "Einzelsitzungspauschale für allgemeine Physiotherapie",
+      "category": "sessions",
+      "price": {
+        "type": "points",
+        "value": "48"
+      },
+      "sourcePages": [
+        3,
+        4
+      ],
+      "detailPages": [
+        4
+      ],
+      "allowedSupplements": [
+        "7350",
+        "7352",
+        "7354",
+        "7361",
+        "7362",
+        "7363"
+      ],
+      "notes": "1 Zu dieser Tarifziffer gehören alle einfachen oder Kombinations-\nBehandlungen, die nicht ausdrücklich unter den Tarifziffern 7311–7340\naufgeführt werden.\n2 Die allgemeine Physiotherapie umfasst insbesondere:\na. Massnahmen der physiotherapeutischen Untersuchung und\nAbklärung;\nb. Massnahmen der Behandlung, Beratung und Instruktion;\nc.   Physikalische Massnahmen im Rahmen der Physiotherapie.\n3 Die Tarifziffer 7301 beinhaltet auch:\n-    Kombinationen von allgemeiner Physiotherapie und Elektro- oder\nThermotherapie\n-    Kombination von allgemeiner Physiotherapie und Instruktion bei\nGerätevermietung",
+      "allowedSessions": []
+    },
+    {
+      "id": "7311",
+      "code": "7311",
+      "title": "Einzelsitzungspauschale für aufwändige Physiotherapie",
+      "category": "sessions",
+      "price": {
+        "type": "points",
+        "value": "77"
+      },
+      "sourcePages": [
+        3,
+        4,
+        5
+      ],
+      "detailPages": [
+        4,
+        5
+      ],
+      "allowedSupplements": [
+        "7350",
+        "7351",
+        "7352",
+        "7354",
+        "7361",
+        "7362",
+        "7363"
+      ],
+      "notes": "1 Diese Ziffer kann verrechnet werden bei Bestehen eines der folgenden\nKrankheitsbilder oder einer der folgenden Situationen, welche die\nBehandlung erschweren:\na. Beeinträchtigungen des Nervensystems;\nb. Kinder bis zur Vollendung des sechsten Lebensjahres;\nc. Lungenventilationsstörungen;\nd. Störungen des Lymphgefässsystems, welche eine komplexe\nBehandlung durch speziell dafür ausgebildete\nPhysiotherapeutinnen und -therapeuten erfordern;\ne. palliative Situation;\nf. sensomotorische Verlangsamung oder kognitives Defizit.\nZu den für die Physiotherapie relevanten kognitiven Fähigkeiten\neines Menschen zählen die Aufmerksamkeit, die Erinnerung, das\nLernen, das Planen, die Orientierung und der Wille.\nSensomotorische Verlangsamungen äussern sich in\nverlangsamten Bewegungen oder unkoordinierten\nBewegungsabläufen oder einer Beeinträchtigung beim Sprechen\noder Schlucken, die aufgrund einer Dysfunktion des\nZusammenspiels von sensorischen und motorischen Leistungen\nder Patientin oder des Patienten bestehen. Defizite sind\nVerminderungen oder Verzögerungen in der (Weiter)Entwicklung\ndieser Fähigkeiten, die zu einer Verlangsamung der Patientin oder\ndes Patienten bei der physiotherapeutischen Zielerreichung\nführen;\ng. Behandlung von zwei oder mehr Körperregionen;\nh. Behandlung von zwei nicht benachbarten Gelenken (kann in\nderselben Körperregion sein);\ni. bei einer Erkrankung, die eine aufwändige Hilfestellung benötigt\n(z.B. Verbrennungen);\nj. bei behandlungsnotwendiger Instruktion von Pflege- oder\nBetreuungspersonal.\nNach Gesuchstellung kann der Versicherer die Verrechnung der Position\n7311 für weitere Indikationen bewilligen.",
+      "allowedSessions": []
+    },
+    {
+      "id": "7313",
+      "code": "7313",
+      "title": "Sitzungspauschale für Hippotherapie",
+      "category": "sessions",
+      "price": {
+        "type": "points",
+        "value": "77"
+      },
+      "sourcePages": [
+        3,
+        5
+      ],
+      "detailPages": [
+        5
+      ],
+      "allowedSupplements": [
+        "7350",
+        "7353"
+      ],
+      "notes": "1 Mit dieser Position sind die Leistungen der Physiotherapeutin bzw. des\nPhysiotherapeuten abgegolten.\n2 Die Hippotherapie wird durch speziell in dieser Therapie ausgebildete\nPhysiotherapeutinnen und -therapeuten durchgeführt.\n3 Die Zuschlagsposition für die Benutzung der Infrastruktur befindet sich\nunter Ziffer 7353.",
+      "allowedSessions": []
+    },
+    {
+      "id": "7330",
+      "code": "7330",
+      "title": "Sitzungspauschale für Gruppentherapie (2 bis 5 Patientinnen und Patienten)",
+      "category": "sessions",
+      "price": {
+        "type": "points",
+        "value": "25"
+      },
+      "sourcePages": [
+        3,
+        5
+      ],
+      "detailPages": [
+        5
+      ],
+      "allowedSupplements": [
+        "7352",
+        "7361"
+      ],
+      "notes": "1 Bei der Gruppentherapie handelt es sich um Gymnastik oder\nBewegungstherapie im Therapieraum oder -bad.\n2 Die Gruppe umfasst 2 bis 5 Patientinnen und Patienten.\n3 Die Ziffer 7330 kann pro Patientin oder Patient verrechnet werden, und\nzwar einmal pro Sitzung.",
+      "allowedSessions": []
+    },
+    {
+      "id": "7340",
+      "code": "7340",
+      "title": "Sitzungspauschale für Medizinische Trainingstherapie MTT",
+      "category": "sessions",
+      "price": {
+        "type": "points",
+        "value": "22"
+      },
+      "sourcePages": [
+        3,
+        5
+      ],
+      "detailPages": [
+        5
+      ],
+      "allowedSupplements": [],
+      "notes": "1 Diese Sitzungspauschale umfasst die Einzelbetreuung zur Anamnese,\nInstruktion, Evaluation oder Anpassung des Trainingsprogramms in der\nMTT-Infrastruktur.\n2 Zur Instruktion der Patientin oder des Patienten zum MTT-Programm\nkann die Physiotherapeutin oder der Physiotherapeut unabhängig von\nder Anzahl Sitzungen zwei Sitzungen innerhalb des gesamten MTT-\nProgramms pro Patientin oder Patient auf der Basis der Ziffer 7301\nanstelle von Ziffer 7340 verrechnen.\n3 Die von der Patientin oder vom Patienten durchgeführte medizinische\nTrainingstherapie wird von der Physiotherapeutin oder vom\nPhysiotherapeuten überwacht und kontrolliert.\n4 MTT wird nur im Sinne von Rehabilitation vergütet.\nFür MTT als diagnostische oder präventive Leistung besteht keine\nLeistungspflicht; ebenso gehen Tests und deren Auswertung nicht zu\nLasten der Versicherung.",
+      "allowedSessions": []
+    },
+    {
+      "id": "7350",
+      "code": "7350",
+      "title": "Zuschlagsposition für die erste Behandlung",
+      "category": "supplements",
+      "price": {
+        "type": "points",
+        "value": "24"
+      },
+      "sourcePages": [
+        3,
+        5,
+        6
+      ],
+      "detailPages": [
+        5,
+        6
+      ],
+      "allowedSupplements": [],
+      "notes": "1 Dieser Zuschlag gilt als Pauschale für den zusätzlichen Aufwand bei\neiner ersten Behandlung. Der zusätzliche Aufwand besteht in der\nProblemerfassung, dem Aktenstudium, der Problembeurteilung, der\nZielfestlegung und der Behandlungsplanung.\n2 Diese Tarifziffer darf zur ersten Sitzung pro Fall pro abrechnenden\nLeistungserbringer (Institution, Organisation oder Praxis der\nPhysiotherapie) verrechnet werden:\na. einmal innerhalb von 36 Sitzungen; oder\nb. in einem Rezidivfall, wenn sich das Krankheitsbild grundlegend\nverändert hat; oder\nc. wenn die letzte Behandlung mehr als sechs Monate zurückliegt.",
+      "allowedSessions": [
+        "7301",
+        "7311",
+        "7313"
+      ]
+    },
+    {
+      "id": "7351",
+      "code": "7351",
+      "title": "Zuschlagsposition für die Behandlung von Kindern mit chronischer Behinderung (Alter: bis zur Vollendung des sechsten Lebensjahres)",
+      "category": "supplements",
+      "price": {
+        "type": "points",
+        "value": "30"
+      },
+      "sourcePages": [
+        3,
+        6
+      ],
+      "detailPages": [
+        6
+      ],
+      "allowedSupplements": [],
+      "notes": "1 Diese Zuschlagsposition darf für pädiatrische Patientinnen und\nPatienten mit chronischer Behinderung bis zur Vollendung des sechsten\nLebensjahres verrechnet werden.\n2 Als chronische Behinderung gelten insbesondere:\na. Missbildungen oder Systemerkrankungen des Skeletts oder des\nBewegungsapparates;\nb. Missbildungen oder progressive Erkrankungen der\nSkelettmuskulatur;\nc. chronische Lungenventilationsstörungen;\nd. Missbildungen oder Schädigungen des zentralen und/oder\nperipheren Nervensystems.\nDie chronische Behinderung ist in jedem Fall ärztlich zu begründen.\n3 Die Physiotherapeutin oder der Physiotherapeut verrechnet ihre/seine\nLeistungen gemäss Ziffer 7311.\n4 Diese Zuschlagsposition kann einmal pro Patientin bzw. Patient und pro\nSitzung verrechnet werden.",
+      "allowedSessions": [
+        "7311"
+      ]
+    },
+    {
+      "id": "7352",
+      "code": "7352",
+      "title": "Zuschlagsposition für die Benutzung des Geh- oder Schwimmbads",
+      "category": "supplements",
+      "price": {
+        "type": "points",
+        "value": "19"
+      },
+      "sourcePages": [
+        3,
+        6
+      ],
+      "detailPages": [
+        6
+      ],
+      "allowedSupplements": [],
+      "notes": "1 Diese Zuschlagsposition deckt alle Infrastrukturkosten (einschliesslich\nEintrittspreis) für die Benutzung eines Geh-, Schwimm- oder\nStangerbads ab.\n2 Diese Zuschlagsposition kann nur für Bewegungstherapie im Wasser\nvergütet werden.\n3 Die Physiotherapeutin oder der Physiotherapeut verrechnet ihre/seine\nLeistungen gemäss Ziffer 7301, 7311 oder 7330.\n4 Die Physiotherapeutin oder der Physiotherapeut ist während der\nTherapie anwesend.\n5 Diese Zuschlagsposition kann einmal pro Patientin bzw. Patient und pro\nSitzung verrechnet werden.",
+      "allowedSessions": [
+        "7301",
+        "7311",
+        "7330"
+      ]
+    },
+    {
+      "id": "7353",
+      "code": "7353",
+      "title": "Zuschlagsposition für die Benutzung der Infrastruktur bei Hippotherapie",
+      "category": "supplements",
+      "price": {
+        "type": "points",
+        "value": "67"
+      },
+      "sourcePages": [
+        3,
+        6
+      ],
+      "detailPages": [
+        6
+      ],
+      "allowedSupplements": [],
+      "notes": "1 Mit diesem Zuschlag sind alle Kosten für die Infrastruktur (wie Kosten\nfür Pferd und Pferdepfleger/in / -führer/in, Stallung, Futter) abgegolten.\n2 Die Physiotherapeutin oder der Physiotherapeut verrechnet ihre/seine\nLeistungen gemäss Ziffer 7313.\n3 Diese Zuschlagsposition kann einmal pro Patientin bzw. Patient und pro\nSitzung verrechnet werden.",
+      "allowedSessions": [
+        "7313"
+      ]
+    },
+    {
+      "id": "7354",
+      "code": "7354",
+      "title": "Zuschlagsposition für die Weg- oder Zeitentschädigung",
+      "category": "supplements",
+      "price": {
+        "type": "points",
+        "value": "34"
+      },
+      "sourcePages": [
+        3,
+        7
+      ],
+      "detailPages": [
+        7
+      ],
+      "allowedSupplements": [],
+      "notes": "1 Anrecht auf die Weg- oder Zeitentschädigung hat die Physiotherapeutin\noder der Physiotherapeut bei einer notwendigen Behandlung ausserhalb\nder Institution, der Organisation oder der Praxis, wenn die behandelnde\nÄrztin oder der behandelnde Arzt ausdrücklich Domiziltherapie verordnet.\n2 Mit der Pauschale sind sowohl der Zeitaufwand für die Wegstrecke als\nauch die Fahrzeugkosten bzw. die Kosten für die Benutzung eines\nöffentlichen Verkehrsmittels abgegolten.\n3 Ungeachtet der Wegstrecke kann bei Domiziltherapie immer nur der\nobige Ansatz in Rechnung gestellt werden.\n4 Bei ambulanten oder stationären Behandlungen in einem Spital, in einer\nKlinik oder in einem Alters- und Pflegeheim (gemäss kantonaler Alters-\nund Pflegeheim-Liste) kann keine Weg- oder Zeitentschädigung\nverrechnet werden.",
+      "allowedSessions": [
+        "7301",
+        "7311"
+      ]
+    },
+    {
+      "id": "7361",
+      "code": "7361",
+      "title": "Zuschlagsposition für Behandlungsmaterial",
+      "category": "supplements",
+      "price": {
+        "type": "purchase-cost",
+        "value": null
+      },
+      "sourcePages": [
+        3,
+        7
+      ],
+      "detailPages": [
+        7
+      ],
+      "allowedSupplements": [],
+      "notes": "1 Dieser Zuschlag für das Behandlungsmaterial darf zusätzlich zu den\nSitzungspositionen 7301, 7311 und 7330 verrechnet werden.\n2 Folgende Materialkategorien gelten als Behandlungsmaterial:\n• Verbands-/Polstermaterial (Mengenangabe in cm)\n• Tape-Material\n• Material für Beckenbodenrehabilitation\n• Material für Elektrotherapie\n• Material für Atemtherapie\n3 Verbrauchsmaterialien gehören zu den Sachkosten der\nPraxisinfrastruktur und dürfen der Patientin oder dem Patienten nicht\nextra verrechnet werden.\n4 Das Behandlungsmaterial ist für jede Rechnung (nach maximal neun\nSitzungen) aufzuführen.\n5 Auf der Rechnung aufzuführen sind jeweils die betreffende\nMaterialkategorie, die Mengen (mit Einheiten) sowie der Einkaufspreis\ndes betreffenden Materials (abzüglich weiterzugebende Rabatte und inkl.\nMWST).",
+      "allowedSessions": [
+        "7301",
+        "7311",
+        "7330"
+      ]
+    },
+    {
+      "id": "7362",
+      "code": "7362",
+      "title": "Für Behandlung mit Vaginalsonde",
+      "category": "incontinence",
+      "price": {
+        "type": "chf",
+        "value": "50.00"
+      },
+      "sourcePages": [
+        3,
+        7
+      ],
+      "detailPages": [
+        7
+      ],
+      "allowedSupplements": [],
+      "notes": "1 Die Pauschale ist als einmaliger Betrag für die gesamte Behandlung\n(unabhängig von der durchgeführten Anzahl Therapiesitzungen) zu\nverstehen. Sie darf maximal einmal pro Kalenderjahr verrechnet werden.\nDie Pauschale wird nur vergütet, wenn die Behandlung mit Vaginal- bzw.\nAnalsonden durchgeführt wird. Die Pauschalen können nicht miteinander\nkumuliert werden.\n2 Die physiotherapeutische Inkontinenztherapie selbst wird mit der\neinfachen Sitzungspauschale 7301 in Rechnung gestellt.\n(Die Ziffer 7311 kommt nur in Frage, wenn die bestehenden tariflichen\nKriterien erfüllt sind.)",
+      "sharedRulesWith": [
+        "7362",
+        "7363"
+      ],
+      "allowedSessions": [
+        "7301",
+        "7311"
+      ]
+    },
+    {
+      "id": "7363",
+      "code": "7363",
+      "title": "Für Behandlung mit Analsonde",
+      "category": "incontinence",
+      "price": {
+        "type": "chf",
+        "value": "90.00"
+      },
+      "sourcePages": [
+        3,
+        7
+      ],
+      "detailPages": [
+        7
+      ],
+      "allowedSupplements": [],
+      "notes": "1 Die Pauschale ist als einmaliger Betrag für die gesamte Behandlung\n(unabhängig von der durchgeführten Anzahl Therapiesitzungen) zu\nverstehen. Sie darf maximal einmal pro Kalenderjahr verrechnet werden.\nDie Pauschale wird nur vergütet, wenn die Behandlung mit Vaginal- bzw.\nAnalsonden durchgeführt wird. Die Pauschalen können nicht miteinander\nkumuliert werden.\n2 Die physiotherapeutische Inkontinenztherapie selbst wird mit der\neinfachen Sitzungspauschale 7301 in Rechnung gestellt.\n(Die Ziffer 7311 kommt nur in Frage, wenn die bestehenden tariflichen\nKriterien erfüllt sind.)",
+      "sharedRulesWith": [
+        "7362",
+        "7363"
+      ],
+      "allowedSessions": [
+        "7301",
+        "7311"
+      ]
+    }
+  ]
+}

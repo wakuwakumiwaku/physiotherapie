@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="de-CH">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Vollständige offizielle KVG-Physiotherapiestruktur, gültig ab 2026: 13 Positionen, Originalregeln und genauer Rechner mit eigenem Taxpunktwert.">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<title>Physiotherapie · Tarifpositionen & Taxpunktwert</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="src/styles.css"><script type="module" src="src/app.js"></script>
+</head>
+<body>
+<a class="skip" href="#main">Zum Inhalt</a>
+<header class="shell">
+<nav class="catalog-switch" aria-label="Kataloge"><a href="https://wakuwakumiwaku.github.io/physiotherapie/" aria-current="page">Physiotherapie</a><a href="https://wakuwakumiwaku.github.io/migel/">MiGeL</a><a href="https://wakuwakumiwaku.github.io/arzttarife/">TARDOC & Pauschalen</a></nav>
+<details class="catalog-directory"><summary>Alle Kataloge</summary><nav aria-label="Weitere Kataloge"><a href="https://wakuwakumiwaku.github.io/dentotar/">DENTOTAR</a><a href="https://wakuwakumiwaku.github.io/spezialitaetenliste/">Spezialitätenliste</a><a href="https://wakuwakumiwaku.github.io/analysenliste/">Analysenliste</a><a href="https://wakuwakumiwaku.github.io/pflegefinanzierung/">Pflegefinanzierung</a><a href="https://wakuwakumiwaku.github.io/arzneimittelliste/">Arzneimittelliste (ALT)</a><a href="https://wakuwakumiwaku.github.io/spitaltarife/">Spitaltarife</a></nav></details>
+<div class="heading"><div><p class="eyebrow">KVG · Ambulante Leistungen</p><h1>Physiotherapie</h1><p>Tarifpositionen & genauer Taxpunktwert-Rechner</p></div><span class="badge">Gültig ab 01.01.2026</span></div>
+<p class="muted">Amtliche Struktur, kein neuer Preisstand: gegenüber 2018 inhaltlich unverändert. Kantonal unterschiedliche Taxpunktwerte sind <strong>nicht hinterlegt</strong>.</p>
+</header>
+<main id="main" class="shell">
+<p id="startup" role="status">Offiziellen Katalog laden …</p>
+<div id="app" hidden>
+<div class="columns">
+<section class="panel catalog" aria-labelledby="catalog-title"><h2 id="catalog-title">Alle Tarifpositionen</h2>
+<div class="filters"><label for="search">Im gesamten Katalog suchen<input id="search" type="search" placeholder="Code, Behandlung oder Regel …" autocomplete="off"></label><label for="category">Quellbereich<select id="category"><option value="">Alle Bereiche</option></select></label><button id="reset" type="button" class="secondary">Suche zurücksetzen</button></div>
+<p id="result-count" role="status"></p><div id="results"></div><button id="more" type="button" class="secondary">Mehr anzeigen</button>
+</section>
+<section class="panel calculator" aria-labelledby="calculator-title"><h2 id="calculator-title">Eigene Rechensammlung</h2>
+<p class="muted">Nur lokal in diesem Browser. Keine Konten, keine Übermittlung. Bitte keine Patienten- oder Personendaten eingeben.</p>
+<p id="storage-status" role="status"></p>
+<label for="workspace-label">Titel (optional)<input id="workspace-label" maxlength="120" autocomplete="off" placeholder="Zum Beispiel: Rechenvergleich"></label>
+<label for="tpw">Taxpunktwert · eigene Eingabe (CHF/TP)<input id="tpw" inputmode="decimal" type="text" placeholder="Unbekannt – bitte selbst prüfen" autocomplete="off"></label>
+<p class="muted">Kein amtlicher Standardwert. Vertragsbereich, Kanton und Gültigkeit selbst abklären; Eingabe mit bis zu 6 Nachkommastellen. Leer bedeutet unbekannt, 0 ist ein ausdrücklich eingegebener Nullwert.</p>
+<div id="workspace-lines"></div>
+<label for="workspace-notes">Notiz zur Sammlung<textarea id="workspace-notes" maxlength="4000" rows="3" placeholder="Ohne Personendaten"></textarea></label>
+<div id="calculation" aria-live="polite"></div>
+<p class="warning">Keine Abrechnung und keine Vergütungszusage. Eine Sammlung ist kein einzelner Behandlungsfall. Sitzungs-, Alters-, Indikations-, Frequenz- und Verordnungsregeln werden <strong>nicht automatisch geprüft</strong>. Die vollständigen Originalregeln sind bei jeder Position sichtbar aufklappbar.</p>
+<details><summary>Rechenweg & Rundung</summary><p>Anzahl × Taxpunkte × eigene CHF/TP. Fixe CHF-Pauschalen bleiben vom Taxpunktwert unabhängig. 7361 benötigt den selbst erfassten Einkaufspreis abzüglich weiterzugebender Rabatte, inklusive MWST; Kategorie, Menge und Einheit in der Zeilennotiz festhalten.</p><p>Es wird mit Ganzzahlen (BigInt) gerechnet. Jede vollständige Zeile wird erst nach Multiplikation mit der Anzahl kaufmännisch auf 0.01 CHF gerundet (halbe Rappen aufwärts); danach werden die gerundeten Zeilen addiert. Keine 5-Rappen-Barrundung. Fehlende Werte werden nicht als 0 CHF gerechnet.</p></details>
+<div class="actions"><button id="export-json" type="button">JSON sichern</button><label class="file-label" for="import-json">JSON öffnen<input id="import-json" type="file" accept=".json,application/json"></label><button id="export-csv" type="button" class="secondary">CSV herunterladen</button><button id="print" type="button" class="secondary">Drucken</button><button id="raw-storage" type="button" class="secondary">Gelesenen Speicherstand sichern</button></div>
+<p id="action-status" role="status"></p>
+</section>
+</div>
+<section class="panel source-panel" aria-labelledby="source-title"><h2 id="source-title">Quelle, Regeln & Geltungsbereich</h2><div id="source-summary"></div><details><summary>Einleitende Bemerkungen · vollständig (PDF S. 2)</summary><p id="intro" class="source-text"></p></details><details><summary>Datenherkunft & Nutzungsbefund</summary><div id="provenance"></div></details></section>
+</div>
+</main>
+<footer class="shell muted">Unabhängige Nachschlage- und Rechenhilfe. Massgeblich sind die amtliche Quelle, geltendes Recht und der anwendbare Vertrag. Keine medizinische oder rechtliche Beratung.</footer>
+<dialog id="details-dialog" aria-labelledby="details-title"><div class="dialog-head"><h2 id="details-title"></h2><button id="close-details" type="button" class="secondary">Schliessen</button></div><div id="details-content"></div><button id="details-add" type="button">Zur Rechensammlung</button></dialog>
+<dialog id="import-dialog" aria-labelledby="import-title"><div class="dialog-head"><h2 id="import-title">JSON-Vorschau</h2><button id="cancel-import" type="button" class="secondary">Abbrechen</button></div><p>Nur eine Vorschau – noch nichts ersetzt. Die ganze Datei wurde auf Typen, Version, Katalog und Positions-IDs geprüft. Übernehmen ersetzt ausschliesslich diese lokale Rechensammlung.</p><div id="import-preview"></div><p id="import-status" role="status"></p><div class="actions"><button id="backup-before-import" type="button">Aktuellen Entwurf zuerst sichern</button><button id="apply-import" type="button" disabled>Vorschau übernehmen</button></div></dialog>
+<section id="print-area" aria-label="Druckansicht"></section>
+</body></html>
