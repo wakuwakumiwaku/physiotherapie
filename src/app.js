@@ -58,9 +58,10 @@ function renderPreview(workspace,target,print=false){
  if(print){target.append(node('h2','Einleitende Bemerkungen · PDF S. 2'),node('p',catalog.intro,'source-text'),node('p',provenance.versionNote),node('p','Quelle: '+provenance.sources.find(s=>s.sha256===catalog.sourceSha256).url));}
 }
 function endPreview(){pending=null;backedUp=false;paused=false;$('import-json').value='';$('import-dialog').close();storageStatus();}
-async function previewFile(){const file=$('import-json').files[0];if(!file)return;paused=true;previewBefore=guard.baseline;backedUp=false;try{
+async function previewFile(){const file=$('import-json').files[0];if(!file)return;backedUp=false;try{
  if(file.size>1000000)throw Error('Datei grösser als 1 MB');
- const parsed=parseWorkspace(await file.text(),catalog);pending=structuredClone(parsed);renderPreview(pending,$('import-preview'));$('apply-import').disabled=true;$('import-status').textContent=guard.blocked?'Speicher ist geschützt. Vorschau möglich, Übernahme gesperrt.':'Vor Übernahme zuerst den aktuellen Entwurf herunterladen.';$('backup-before-import').disabled=guard.blocked;$('import-dialog').showModal();
+ // Keep valid edits saved during the asynchronous read; pause only for the modal preview.
+ const parsed=parseWorkspace(await file.text(),catalog);paused=true;previewBefore=guard.baseline;pending=structuredClone(parsed);renderPreview(pending,$('import-preview'));$('apply-import').disabled=true;$('import-status').textContent=guard.blocked?'Speicher ist geschützt. Vorschau möglich, Übernahme gesperrt.':'Vor Übernahme zuerst den aktuellen Entwurf herunterladen.';$('backup-before-import').disabled=guard.blocked;$('import-dialog').showModal();
  }catch(error){pending=null;paused=false;$('import-json').value='';announce(`JSON nicht übernommen: ${error.message}`,true);}}
 function bind(){
  for(const id of ['search','category'])$(id).addEventListener(id==='search'?'input':'change',()=>{visible=6;renderResults();});

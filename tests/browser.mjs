@@ -106,6 +106,41 @@ try{
   await fileSelect(p,incoming);await p.locator('#import-dialog[open]').waitFor();assert.equal(await raw(p),before);assert.equal(await p.locator('#workspace-label').inputValue(),'Vorher');await contains(p,'#import-preview',incoming.notes);assert.equal(await p.locator('#import-preview img').count(),0);assert.deepEqual(await p.locator('#import-preview [data-preview-id]').evaluateAll(es=>es.map(e=>e.dataset.previewId)),['7354','7361']);assert.equal(await p.locator('#apply-import').isDisabled(),true);await screenshot(p,'import-preview-before-cancel');await p.locator('#cancel-import').click();assert.equal(await raw(p),before);assert.equal(await p.locator('#import-json').inputValue(),'');
   await fileSelect(p,incoming);await p.locator('#import-dialog[open]').waitFor();const backup=JSON.parse(await download(p,'#backup-before-import','before-import'));assert.deepEqual(backup,beforeState);assert.equal(await raw(p),before);assert.equal(await p.locator('#apply-import').isDisabled(),false);await p.locator('#apply-import').click();assert.deepEqual(JSON.parse(await raw(p)),incoming);await contains(p,'#action-status','zurückgelesen');const exactRaw=await raw(p);await p.reload();await ready(p);assert.equal(await raw(p),exactRaw);assert.equal(await p.locator('#workspace-label').inputValue(),incoming.label);assert.equal(await p.getByRole('textbox',{name:'Notiz 7354',exact:true}).inputValue(),incoming.lines[0].note);assert.deepEqual(JSON.parse(await download(p,'#export-json','imported')),incoming);
  });
+ await scenario('07a-edits-during-file-read-remain-persisted',async(context)=>{
+  const observations=[];report.fileReadEdits=observations;
+  for(const outcome of ['cancel','apply','invalid']){
+   const p=await page(await context(),{...blank(),label:'Vor Dateiauswahl',lines:[line('7330')]});
+   // Hold only the native file-read boundary; keep the real input, app and storage handlers.
+   await p.evaluate(()=>{const read=File.prototype.text;File.prototype.text=async function(){const text=await read.call(this);window.__fileReadHeld=true;await new Promise(resolve=>{window.__releaseFileRead=resolve;});return text;};});
+   const incoming={...blank(),label:'Geprüfter Import',lines:[line('7362')]};
+   await fileSelect(p,outcome==='invalid'?'{':incoming,`${outcome}.json`);
+   await p.waitForFunction(()=>window.__fileReadHeld===true);
+   await p.locator('#workspace-label').fill(`Entwurf während Lesen: ${outcome}`);
+   await p.getByRole('textbox',{name:'Anzahl 7330',exact:true}).fill('3');
+   await p.locator('#tpw').fill('0.0002');
+   const expected={...blank(),label:`Entwurf während Lesen: ${outcome}`,tpw:'0.0002',lines:[line('7330','3')]};
+   const duringRead=JSON.parse(await raw(p));
+   await p.evaluate(()=>window.__releaseFileRead());
+   if(outcome==='invalid'){
+    await p.waitForFunction(()=>document.querySelector('#import-json').value==='');
+    await contains(p,'#action-status','JSON nicht übernommen:');
+   }else{
+    await p.locator('#import-dialog[open]').waitFor();
+    if(outcome==='cancel')await p.locator('#cancel-import').click();
+    else{
+     assert.deepEqual(JSON.parse(await download(p,'#backup-before-import','edits-during-read')),expected);
+     await p.locator('#apply-import').click();
+     await p.waitForFunction(()=>!document.querySelector('#import-dialog').open);
+    }
+   }
+   const afterRead=JSON.parse(await raw(p));await p.reload();await ready(p);
+   observations.push({outcome,expected,duringRead,afterRead,reloadedLabel:await p.locator('#workspace-label').inputValue()});
+   assert.deepEqual(duringRead,expected,`${outcome}: valid edits must persist while the selected file is still being read`);
+   assert.deepEqual(afterRead,outcome==='apply'?incoming:expected,`${outcome}: settled import must preserve the correct workspace`);
+   assert.equal(observations.at(-1).reloadedLabel,outcome==='apply'?incoming.label:expected.label);
+  }
+  report.fileReadEdits=observations;
+ });
  await scenario('08-invalid-import-all-or-nothing',async(context)=>{
   const p=await page(await context(),{...blank(),label:'Geschützter Bestand',lines:[line('7301')]});const before=await raw(p),valid={...blank(),lines:[line('7301'),line('7361','2','später','3.00')]};
   const invalids=[['later-row-quantity',{...valid,lines:[line('7301'),line('7361',2,'','3.00')]}],['later-row-id',{...valid,lines:[line('7301'),line('9999')]}],['version',{...valid,schemaVersion:2}],['numeric-tpw',{...valid,tpw:1}],['foreign-app',{...valid,app:'dentotar'}],['foreign-catalog',{...valid,catalogId:'migel-2026'}],['namespace-injection',{...valid,storageKey:'migel.workspace.v1'}],['duplicate',{...valid,lines:[line('7301'),line('7301')]}],['bad-json','{'],['prototype-field',JSON.stringify(valid).replace('{','{"__proto__":{"polluted":true},')],['later-row-material',{...valid,lines:[line('7301'),line('7361','2','','1.001')]}]];
