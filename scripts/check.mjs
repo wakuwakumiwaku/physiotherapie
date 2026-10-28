@@ -9,6 +9,12 @@ export async function preflight(root=project){
  const buffers=new Map(),realRoot=await realpath(root);
  for(const [destination,source] of Object.entries(runtimeFiles)){
   if(destination.includes('..')||path.isAbsolute(destination))throw Error('Invalid runtime destination');
+  // A regular leaf can still be reached through a symlink into an ignored tree.
+  let directory=root;
+  for(const component of source.split('/').slice(0,-1)){
+   directory=path.join(directory,component);const stat=await lstat(directory);
+   if(!stat.isDirectory()||stat.isSymbolicLink())throw Error('Runtime input directory must not be a symlink: '+source);
+  }
   const filename=path.join(root,source),stat=await lstat(filename),real=await realpath(filename);
   if(!stat.isFile()||stat.isSymbolicLink()||!real.startsWith(realRoot+path.sep))throw Error('Runtime input must be an owned regular file: '+source);
   const data=await readFile(filename);if(!data.length)throw Error('Empty runtime input: '+source);

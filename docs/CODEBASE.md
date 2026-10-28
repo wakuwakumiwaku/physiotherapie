@@ -21,6 +21,7 @@ Vanilla ESM, Node >=22, keine npm-Abhängigkeiten und keine Laufzeit-Frameworks.
 | `scripts/build.mjs` | Alle Inputs erst einlesen/validieren, dann isoliert aus Allowlist bauen und gültiges Output ersetzen |
 | `scripts/serve.mjs` | Export `createAppServer({root,basePath})`, nur GET/HEAD und erlaubte Dateien, Loopback-Host-Prüfung, CSP, kein Schreib-API |
 | `tests/domain.test.mjs` | Fachlicher Bestand, Rundung, Suchumfang, strikte Imports, Speicherfehler/Fremdänderungen, CSV |
+| `tests/build.test.mjs` | Echte Build-CLI: symlinkfreie Quellpfade, Erhalt des letzten guten Builds und exakte Outputbytes |
 | `tests/runtime.test.mjs` | Canary-Ausschluss, unveränderter guter Build bei kaputten Inputs, echte HTTP-Bytes/Unterpfad/Privatpfade/Methoden/Host |
 | `tests/test_import_catalog.py` | Public-Datenumfang, Quellpin/Taxonomie, fehlerhafte Quellen/Editionen, tatsächliche Link-Parserlogik |
 | `tests/browser.mjs` | Registrierte native Headless-Abnahme: echte UI, Downloads, Import, Druckprojektion, Speicherfehler/Zwei-Tab-Konflikt, Navigation, 1440/768/390/320px und alle Browser-Fehlerkanäle; externe Testbrowser-Pfade nur über Umgebungsvariablen |
@@ -29,7 +30,7 @@ Vanilla ESM, Node >=22, keine npm-Abhängigkeiten und keine Laufzeit-Frameworks.
 | `.gitignore` | Rohquellen, Exporte, Backups, lokales QA, dist und Caches ausgeschlossen |
 | `README.md`, `DATA.md`, `docs/CODEBASE.md` | Betrieb, Quellen/Semantik, vollständiges öffentliches Inventar |
 
-Das ist der vollständige vorgesehene öffentliche Quelldateisatz (25 Dateien). Runtime: exakt 8 Dateien gemäss `runtimeFiles`. Es gibt keine implizit kopierten Verzeichnisse und keine ignorierten Build-Abhängigkeiten. `dist/`, `sources/`, `.local/`, `node_modules/` und `__pycache__/` sind nicht zu veröffentlichen.
+Das ist der vollständige vorgesehene öffentliche Quelldateisatz (26 Dateien). Runtime: exakt 8 Dateien gemäss `runtimeFiles`. Vor dem Lesen prüft der Build alle Verzeichnisse unterhalb der gewählten Projektwurzel und die Quelldateien mit `lstat`: Auch Symlinks in einen ignorierten Ordner innerhalb des Projekts werden abgelehnt. Ein solcher abgelehnter Input verändert das letzte vollständige `dist/` nicht. Die gewählte Projektwurzel selbst darf weiterhin über einen Alias erreichbar sein. Es gibt keine implizit kopierten Verzeichnisse und keine ignorierten Build-Abhängigkeiten. `dist/`, `sources/`, `.local/`, `node_modules/` und `__pycache__/` sind nicht zu veröffentlichen.
 
 ## Hooks für unabhängige Browserprüfung
 
