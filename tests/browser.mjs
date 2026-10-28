@@ -141,6 +141,31 @@ try{
   }
   report.fileReadEdits=observations;
  });
+ for(const outcome of ['newer-preview','older-error','newer-cancel'])await scenario(`07b-file-read-ownership-${outcome}`,async(context)=>{
+  const p=await page(await context(),{...blank(),label:'Aktueller Entwurf',lines:[line('7330')]});
+  const before=await raw(p),incoming={...blank(),label:'Neueste gewählte Sicherung',lines:[line('7362','2')]};
+  // Delay only the older File read; real change, preview, backup, Apply and storage handlers run.
+  await p.evaluate(()=>{const read=File.prototype.text;File.prototype.text=async function(){const text=await read.call(this);if(this.name==='older.json'){window.__olderReadHeld=true;await new Promise(resolve=>{window.__releaseOlderRead=resolve;});}return text;};});
+  await fileSelect(p,outcome==='older-error'?'{':{...blank(),label:'Veraltete Sicherung',lines:[line('7363')]},'older.json');
+  await p.waitForFunction(()=>window.__olderReadHeld===true);
+  await fileSelect(p,incoming,'newer.json');await p.locator('#import-dialog[open]').waitFor();
+  await contains(p,'#import-preview',incoming.label);assert.equal(await raw(p),before);
+  if(outcome==='newer-cancel')await p.locator('#cancel-import').click();
+  else assert.deepEqual(JSON.parse(await download(p,'#backup-before-import',`owned-${outcome}`)),JSON.parse(before));
+  await p.evaluate(async()=>{window.__releaseOlderRead();await new Promise(resolve=>setTimeout(resolve,0));});
+  if(outcome==='newer-cancel'){
+   assert.equal(await p.locator('#import-dialog').evaluate(d=>d.open),false,'Canceled newer selection must not be resurrected by an older read');
+   await p.locator('#workspace-label').fill('Nach Abbruch weiterhin gespeichert');
+   assert.equal(JSON.parse(await raw(p)).label,'Nach Abbruch weiterhin gespeichert');
+  }else{
+   assert.equal(await p.locator('#import-preview h3').first().textContent(),incoming.label,'Older read must not replace the newest preview');
+   assert.equal(await p.locator('#apply-import').isDisabled(),false,'Older completion must not revoke the newer backup');
+   await p.locator('#apply-import').click();
+   assert.deepEqual(JSON.parse(await raw(p)),incoming,'A late older read failure must not discard the newer pending import');
+   assert.equal(await p.locator('#import-dialog').evaluate(d=>d.open),false);
+   await p.reload();await ready(p);assert.equal(await p.locator('#workspace-label').inputValue(),incoming.label);
+  }
+ });
  await scenario('08-invalid-import-all-or-nothing',async(context)=>{
   const p=await page(await context(),{...blank(),label:'Geschützter Bestand',lines:[line('7301')]});const before=await raw(p),valid={...blank(),lines:[line('7301'),line('7361','2','später','3.00')]};
   const invalids=[['later-row-quantity',{...valid,lines:[line('7301'),line('7361',2,'','3.00')]}],['later-row-id',{...valid,lines:[line('7301'),line('9999')]}],['version',{...valid,schemaVersion:2}],['numeric-tpw',{...valid,tpw:1}],['foreign-app',{...valid,app:'dentotar'}],['foreign-catalog',{...valid,catalogId:'migel-2026'}],['namespace-injection',{...valid,storageKey:'migel.workspace.v1'}],['duplicate',{...valid,lines:[line('7301'),line('7301')]}],['bad-json','{'],['prototype-field',JSON.stringify(valid).replace('{','{"__proto__":{"polluted":true},')],['later-row-material',{...valid,lines:[line('7301'),line('7361','2','','1.001')]}]];

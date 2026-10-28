@@ -2,7 +2,7 @@ import {STORAGE_KEY,validateCatalog,validateProvenance,emptyWorkspace,validateWo
 const $=id=>document.getElementById(id);
 const node=(tag,text,className)=>{const e=document.createElement(tag);if(text!==undefined)e.textContent=text;if(className)e.className=className;return e;};
 const button=(text,action,className='secondary')=>{const e=node('button',text,className);e.type='button';e.addEventListener('click',action);return e;};
-let catalog,provenance,guard,draft,visible=6,selected=null,paused=false,pending=null,previewBefore=null,backedUp=false;
+let catalog,provenance,guard,draft,visible=6,selected=null,paused=false,pending=null,previewBefore=null,backedUp=false,importRevision=0;
 function announce(text,error=false){$('action-status').textContent=text;$('action-status').className=error?'error':'';}
 function storageStatus(){ $('storage-status').textContent=guard.blocked?`${guard.reason} Es wird nichts überschrieben; dieser Entwurf bleibt exportierbar.`:'Lokaler Speicher bereit · nur physiotherapie.workspace.v1';$('storage-status').className=guard.blocked?'warning':'storage-ok';$('raw-storage').disabled=guard.baseline===null; }
 function save(){if(!paused){try{validateWorkspace(draft,catalog);guard.save(draft);}catch{ /* Keep invalid input as a visible unsaved draft. */ }}storageStatus();renderCalculation();}
@@ -57,12 +57,13 @@ function renderPreview(workspace,target,print=false){
  for(const warning of result.warnings)target.append(node('p',warning,'warning'));
  if(print){target.append(node('h2','Einleitende Bemerkungen · PDF S. 2'),node('p',catalog.intro,'source-text'),node('p',provenance.versionNote),node('p','Quelle: '+provenance.sources.find(s=>s.sha256===catalog.sourceSha256).url));}
 }
-function endPreview(){pending=null;backedUp=false;paused=false;$('import-json').value='';$('import-dialog').close();storageStatus();}
-async function previewFile(){const file=$('import-json').files[0];if(!file)return;backedUp=false;try{
+function endPreview(){importRevision++;pending=null;backedUp=false;paused=false;$('import-json').value='';$('import-dialog').close();storageStatus();}
+async function previewFile(){const revision=++importRevision,file=$('import-json').files[0];if(!file)return;backedUp=false;try{
  if(file.size>1000000)throw Error('Datei grösser als 1 MB');
- // Keep valid edits saved during the asynchronous read; pause only for the modal preview.
- const parsed=parseWorkspace(await file.text(),catalog);paused=true;previewBefore=guard.baseline;pending=structuredClone(parsed);renderPreview(pending,$('import-preview'));$('apply-import').disabled=true;$('import-status').textContent=guard.blocked?'Speicher ist geschützt. Vorschau möglich, Übernahme gesperrt.':'Vor Übernahme zuerst den aktuellen Entwurf herunterladen.';$('backup-before-import').disabled=guard.blocked;$('import-dialog').showModal();
- }catch(error){pending=null;paused=false;$('import-json').value='';announce(`JSON nicht übernommen: ${error.message}`,true);}}
+ // Keep valid edits saved during the asynchronous read; pause only for the current modal preview.
+ const raw=await file.text();if(revision!==importRevision)return;
+ const parsed=parseWorkspace(raw,catalog);paused=true;previewBefore=guard.baseline;pending=structuredClone(parsed);renderPreview(pending,$('import-preview'));$('apply-import').disabled=true;$('import-status').textContent=guard.blocked?'Speicher ist geschützt. Vorschau möglich, Übernahme gesperrt.':'Vor Übernahme zuerst den aktuellen Entwurf herunterladen.';$('backup-before-import').disabled=guard.blocked;$('import-dialog').showModal();
+ }catch(error){if(revision!==importRevision)return;pending=null;paused=false;$('import-json').value='';announce(`JSON nicht übernommen: ${error.message}`,true);}}
 function bind(){
  for(const id of ['search','category'])$(id).addEventListener(id==='search'?'input':'change',()=>{visible=6;renderResults();});
  $('reset').addEventListener('click',()=>{$('search').value='';$('category').value='';visible=6;renderResults();$('search').focus();});$('more').addEventListener('click',()=>{visible+=6;renderResults();});
