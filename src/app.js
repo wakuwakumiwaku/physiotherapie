@@ -57,8 +57,8 @@ function renderPreview(workspace,target,print=false){
  for(const warning of result.warnings)target.append(node('p',warning,'warning'));
  if(print){target.append(node('h2','Einleitende Bemerkungen · PDF S. 2'),node('p',catalog.intro,'source-text'),node('p',provenance.versionNote),node('p','Quelle: '+provenance.sources.find(s=>s.sha256===catalog.sourceSha256).url));}
 }
-function endPreview(){importRevision++;pending=null;backedUp=false;paused=false;$('import-json').value='';$('import-dialog').close();storageStatus();}
-async function previewFile(){const revision=++importRevision,file=$('import-json').files[0];if(!file)return;backedUp=false;try{
+function endPreview(){importRevision++;pending=null;previewBefore=null;backedUp=false;paused=false;$('apply-import').disabled=true;$('backup-before-import').disabled=true;$('import-json').value='';$('import-dialog').close();storageStatus();}
+async function previewFile(){const revision=++importRevision,file=$('import-json').files[0];pending=null;previewBefore=null;backedUp=false;paused=false;$('apply-import').disabled=true;$('backup-before-import').disabled=true;$('import-dialog').close();if(!file)return;try{
  if(file.size>1000000)throw Error('Datei grösser als 1 MB');
  // Keep valid edits saved during the asynchronous read; pause only for the current modal preview.
  const raw=await file.text();if(revision!==importRevision)return;
