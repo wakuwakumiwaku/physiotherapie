@@ -25,8 +25,8 @@ function add(position){
  if(existing){announce(`${position.code} ist bereits in der Sammlung; Anzahl dort bearbeiten.`);return;}
  draft.lines.push({id:position.id,quantity:'1',materialChf:'',note:''});renderLines();save();announce(`${position.code} zur Sammlung hinzugefügt.`);
 }
-function renderResults(){const found=searchCatalog(catalog,$('search').value,$('category').value);$('results').replaceChildren();$('result-count').textContent=`${found.length} von ${catalog.positions.length} Positionen · ${Math.min(visible,found.length)} angezeigt`;
- for(const p of found.slice(0,visible)){const card=node('article',undefined,'position');card.dataset.id=p.id;card.append(node('span',p.code,'code'),node('h3',p.title),node('p',priceLabel(p),'amount'));const actions=node('div',undefined,'actions');actions.append(button('Details & Regeln',()=>openDetails(p)),button('Hinzufügen',()=>add(p),''));card.append(actions);$('results').append(card);}
+function renderResults(start=0){const found=searchCatalog(catalog,$('search').value,$('category').value);if(!start)$('results').replaceChildren();$('result-count').textContent=`${found.length} von ${catalog.positions.length} Positionen · ${Math.min(visible,found.length)} angezeigt`;
+ for(const p of found.slice(start,visible)){const card=node('article',undefined,'position');card.dataset.id=p.id;card.append(node('span',p.code,'code'),node('h3',p.title),node('p',priceLabel(p),'amount'));const actions=node('div',undefined,'actions');actions.append(button('Details & Regeln',()=>openDetails(p)),button('Hinzufügen',()=>add(p),''));card.append(actions);$('results').append(card);}
  if(!found.length)$('results').append(node('p','Keine Treffer. Bitte einen anderen Begriff oder Bereich wählen.'));
  $('more').hidden=visible>=found.length;
 }
@@ -66,7 +66,7 @@ async function previewFile(){const revision=++importRevision,file=$('import-json
  }catch(error){if(revision!==importRevision)return;pending=null;paused=false;$('import-json').value='';announce(`JSON nicht übernommen: ${error.message}`,true);}}
 function bind(){
  for(const id of ['search','category'])$(id).addEventListener(id==='search'?'input':'change',()=>{visible=6;renderResults();});
- $('reset').addEventListener('click',()=>{$('search').value='';$('category').value='';visible=6;renderResults();$('search').focus();});$('more').addEventListener('click',()=>{visible+=6;renderResults();});
+ $('reset').addEventListener('click',()=>{$('search').value='';$('category').value='';visible=6;renderResults();$('search').focus();});$('more').addEventListener('click',()=>{const before=$('results').children.length;visible+=6;renderResults(before);$('results').children[before]?.querySelector('button')?.focus();});
  $('close-details').addEventListener('click',()=>$('details-dialog').close());$('details-add').addEventListener('click',()=>{add(selected);$('details-dialog').close();});
  for(const [id,key] of [['workspace-label','label'],['workspace-notes','notes'],['tpw','tpw']])$(id).addEventListener('input',()=>{draft[key]=key==='tpw'?$(id).value.trim().replace(',','.'):$(id).value;save();});
  $('export-json').addEventListener('click',()=>{try{downloadWorkspace(draft);announce('JSON-Download ausgelöst. Datei lokal aufbewahren.');}catch(error){announce(error.message,true);}});

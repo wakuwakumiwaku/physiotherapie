@@ -187,6 +187,21 @@ try{
   await p.locator('#search').fill('7351');await p.locator('#results article[data-id="7351"]').getByRole('button',{name:'Details & Regeln',exact:true}).click();await geometry(p,`${width}-details-top`,'#details-dialog');await screenshot(p,`${width}-details-top`);await p.locator('#details-dialog').evaluate(e=>e.scrollTo(0,e.scrollHeight));await geometry(p,`${width}-details-bottom`,'#details-dialog');await screenshot(p,`${width}-details-bottom`);await p.locator('#close-details').click();
   await add(p,'7351');await add(p,'7361');await p.locator('#tpw').fill('1.125');await p.getByRole('textbox',{name:'Materialbetrag 7361',exact:true}).fill('12.45');await p.locator('#workspace-notes').fill('Responsive: keine Personendaten');await p.locator('#export-json').scrollIntoViewIfNeeded();await geometry(p,`${width}-calculator-bottom`);await screenshot(p,`${width}-calculator-bottom`);await p.locator('#export-json').focus();await p.keyboard.press('Tab');assert.equal(await p.locator('#import-json').evaluate(e=>e===document.activeElement),true);
  });
+ await scenario('12a-pagination-keyboard-preserves-prefix-and-enters-new-results',async(context)=>{
+  const p=await page(await context());assert.deepEqual(await p.locator('#results article').evaluateAll(es=>es.map(e=>e.dataset.id)),codes.slice(0,6));
+  for(const [key,before,after] of [['Enter',6,12],['Space',12,13]]){
+   await p.evaluate(()=>{window.__paginationRows=[...document.querySelector('#results').children];});
+   await p.locator('#more').focus();await p.keyboard.press(key);
+   assert.deepEqual(await p.locator('#results article').evaluateAll(es=>es.map(e=>e.dataset.id)),codes.slice(0,after));
+   const result=await p.evaluate(()=>({retained:window.__paginationRows.every((e,i)=>document.querySelector('#results').children[i]===e),focusedId:document.activeElement.closest('#results [data-id]')?.dataset.id??null,focusedDetails:document.activeElement.textContent==='Details & Regeln'}));
+   assert.deepEqual(result,{retained:true,focusedId:codes[before],focusedDetails:true},'append must retain connected result rows and focus the first newly revealed detail button');
+  }
+  assert.equal(await p.locator('#more').isHidden(),true);assert.equal(await raw(p),null);
+  await p.keyboard.press('Enter');assert.equal(await p.locator('#details-title').textContent(),`${codes[12]} · ${catalog.positions[12].title}`);await p.keyboard.press('Escape');
+  assert.equal(await p.locator('#results [data-id="7363"] button').first().evaluate(e=>e===document.activeElement),true,'closing native details returns to the new keyboard result');
+  await p.locator('#category').selectOption('incontinence');assert.deepEqual(await p.locator('#results article').evaluateAll(es=>es.map(e=>e.dataset.id)),['7362','7363']);
+  await p.locator('#reset').click();assert.deepEqual(await p.locator('#results article').evaluateAll(es=>es.map(e=>e.dataset.id)),codes.slice(0,6));assert.equal(await raw(p),null);
+ });
  await scenario('13-clean-channels-all-pages-no-external-or-upload',async()=>{const bad=report.channels.filter(e=>['pageerror','requestfailed','http-error','forbidden-request'].includes(e.kind)||(e.kind==='console'&&['error','warning'].includes(e.type)));assert.deepEqual(bad,[]);assert.ok(report.channels.filter(e=>e.kind==='request').length>0);});
 }catch(e){report.fatal=e.stack;console.error(e.stack);process.exitCode=1;}
 finally{
