@@ -10,8 +10,10 @@ export function createAppServer({root=path.join(project,'dist'),basePath='/'}={}
  return http.createServer(async(req,res)=>{
   const headers={'cache-control':'no-store','x-content-type-options':'nosniff','referrer-policy':'no-referrer','content-security-policy':"default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'"};
   const send=(code,text)=>{res.writeHead(code,{...headers,'content-type':'text/plain; charset=utf-8'});res.end(req.method==='HEAD'?undefined:text);};
-  let host;try{host=new URL('http://'+req.headers.host).hostname;}catch{send(400,'Invalid Host');return;}
-  if(!['127.0.0.1','localhost','[::1]'].includes(host)){send(403,'Local Host required');return;}
+  const authority=req.headers.host;
+  if(typeof authority!=='string'||!authority){send(400,'Missing Host');return;}
+  const local=authority.match(/^(?:localhost|127\.0\.0\.1|\[::1\])(?::([0-9]{1,5}))?$/i);
+  if(!local||(local[1]!==undefined&&(Number(local[1])<1||Number(local[1])>65535))){send(403,'Local Host required');return;}
   if(!['GET','HEAD'].includes(req.method)){res.setHeader('Allow','GET, HEAD');send(405,'Method not allowed');return;}
   let pathname;try{pathname=decodeURIComponent(new URL(req.url,'http://127.0.0.1').pathname);}catch{send(400,'Bad URL');return;}
   if(!pathname.startsWith(basePath)){send(404,'Not found');return;}
