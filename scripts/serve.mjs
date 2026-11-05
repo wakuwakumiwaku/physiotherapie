@@ -1,5 +1,5 @@
 import http from 'node:http';
-import {readFile,realpath} from 'node:fs/promises';
+import {readFile,realpath,lstat} from 'node:fs/promises';
 import path from 'node:path';
 import {fileURLToPath,pathToFileURL} from 'node:url';
 import {runtimeFiles} from './files.mjs';
@@ -18,8 +18,10 @@ export function createAppServer({root=path.join(project,'dist'),basePath='/'}={}
   const relative=pathname.slice(basePath.length)||'index.html';
   if(!Object.hasOwn(runtimeFiles,relative)){send(404,'Not found');return;}
   try{
-   const [target,realRoot]=await Promise.all([realpath(path.join(root,relative)),realpath(root)]);
-   if(!target.startsWith(realRoot+path.sep)){send(404,'Not found');return;}
+   let step=root;
+   for(const part of relative.split('/')){step=path.join(step,part);if((await lstat(step)).isSymbolicLink()){send(404,'Not found');return;}}
+   const [target,realRoot]=await Promise.all([realpath(step),realpath(root)]);
+   if(!target.startsWith(realRoot+path.sep)||!(await lstat(target)).isFile()){send(404,'Not found');return;}
    const content=await readFile(target);res.writeHead(200,{...headers,'content-type':types[path.extname(relative)]||'application/octet-stream','content-length':content.length,'cache-control':'no-cache'});res.end(req.method==='HEAD'?undefined:content);
   }catch{send(404,'Not found');}
  });
