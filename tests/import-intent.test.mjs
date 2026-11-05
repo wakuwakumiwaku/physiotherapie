@@ -61,6 +61,7 @@ async function importFixture(initial={...plan([line('7330')]),label:'Before impo
  await new vm.Script(executable,{filename:'src/app.js'}).runInContext(context);
  assert.equal(body.dataset.ready,'true',get('startup').textContent);assert.equal(writes.length,0,'no startup writes');
  const f={get,raw,reads,writes,downloads,initialRaw,foreignRaw,
+  async storageEvent(fields={}){const handler=windowEvents.get('storage');assert.ok(handler);await handler({storageArea:storage,key:STORAGE_KEY,...fields});},
   select(file){get('import-json').files=file?[file]:[];get('import-json').value=file?'C:\\fakepath\\'+file.name:'';return get('import-json').fire('change');},
   async input(id,value){get(id).value=value;await get(id).fire('input');},
   async escape(){const e=await get('import-dialog').fire('cancel');assert.equal(e.defaultPrevented,true,'real Escape handler');},
@@ -203,4 +204,35 @@ for(const completion of ['cancel','Escape','apply'])test(`real import completion
  assert.equal(f.get('apply-import').disabled,true,'completed preview has no apply permission');
  assert.equal(f.get('import-json').value,'');assert.equal(f.get('import-dialog').open,false);
  assert.equal(f.writes.length,completion==='apply'?1:0);f.assertStorage();
+});
+
+for(const key of [STORAGE_KEY,null])test(`storage-area: sessionStorage ${key===null?'clear':'same-key change'} cannot freeze local saves`,async()=>{
+ const f=await importFixture(),before=f.snapshot();
+ const sessionStorage={getItem(){assert.fail('sessionStorage must not be read');}};
+ await f.storageEvent({storageArea:sessionStorage,key});
+ const afterEvent=f.snapshot();await f.input('workspace-label','saved after session event');
+ assert.equal(JSON.parse(f.raw.get(STORAGE_KEY)).label,'saved after session event','valid edits must still autosave');
+ assert.deepEqual(afterEvent,before,'unrelated storage area must not alter warnings, import authority or draft');
+ assert.equal(f.writes.length,1);f.assertStorage();
+});
+for(const key of [STORAGE_KEY,null])test(`storage-area: sessionStorage ${key===null?'clear':'same-key change'} preserves granted import authority`,async()=>{
+ const f=await importFixture(),candidate=incoming('Incoming after session event');await f.select(importFile(candidate));await f.backup(JSON.parse(f.initialRaw));
+ const before=f.snapshot();await f.storageEvent({storageArea:{},key});assert.deepEqual(f.snapshot(),before);
+ assert.equal(f.get('apply-import').disabled,false);await f.get('apply-import').click();
+ assert.deepEqual(JSON.parse(f.raw.get(STORAGE_KEY)),candidate);assert.equal(f.writes.length,1);f.assertStorage();
+});
+for(const key of [STORAGE_KEY,null])test(`storage-area: localStorage ${key===null?'clear':'same-key change'} still protects a pending import and local draft`,async()=>{
+ const f=await importFixture();await f.select(importFile(incoming('Incoming')));await f.backup(JSON.parse(f.initialRaw));
+ const foreign=key===null?null:JSON.stringify({...plan(),label:'Other local tab'});
+ if(foreign===null)f.raw.delete(STORAGE_KEY);else f.raw.set(STORAGE_KEY,foreign);
+ await f.storageEvent({key});
+ assert.equal(f.get('apply-import').disabled,true);assert.match(f.get('storage-status').textContent,/Fremdänderung/);
+ await f.input('workspace-label','retained local edit');
+ await f.get('apply-import').fire('click');assert.equal(f.writes.length,0);assert.equal(f.raw.get(STORAGE_KEY)??null,foreign);
+ await f.get('export-json').click();assert.equal(JSON.parse(await f.downloads.at(-1).blob.text()).label,'retained local edit');
+ assert.equal(f.raw.get('foreign.workspace.v1'),f.foreignRaw);
+});
+test('storage-area: a different localStorage key leaves autosave enabled',async()=>{
+ const f=await importFixture();await f.storageEvent({key:'foreign.workspace.v1'});await f.input('workspace-label','saved after unrelated key');
+ assert.equal(JSON.parse(f.raw.get(STORAGE_KEY)).label,'saved after unrelated key');assert.equal(f.writes.length,1);f.assertStorage();
 });

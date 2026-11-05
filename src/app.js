@@ -82,7 +82,7 @@ function bind(){
   if(!guard.save(pending)){storageStatus();$('apply-import').disabled=true;$('import-status').textContent=guard.reason;return;}
   draft=structuredClone(pending);hydrate();endPreview();announce('Geprüfte Zusammenstellung übernommen und im eigenen Speicher zurückgelesen.');
  }catch(error){guard.freeze('Übernahme angehalten: '+error.message);storageStatus();$('apply-import').disabled=true;$('import-status').textContent=guard.reason;}});
- window.addEventListener('storage',event=>{if(event.key===STORAGE_KEY||event.key===null){guard.freeze('Fremdänderung im lokalen Speicher. Entwurf bleibt erhalten; bitte JSON sichern und neu laden.');storageStatus();$('apply-import').disabled=true;}});
+ window.addEventListener('storage',event=>{if(event.storageArea===window.localStorage&&(event.key===STORAGE_KEY||event.key===null)){guard.freeze('Fremdänderung im lokalen Speicher. Entwurf bleibt erhalten; bitte JSON sichern und neu laden.');storageStatus();$('apply-import').disabled=true;}});
 }
 async function start(){try{
  const [catalogResponse,provenanceResponse]=await Promise.all([fetch(new URL('../data/catalog.json',import.meta.url)),fetch(new URL('../data/provenance.json',import.meta.url))]);if(!catalogResponse.ok||!provenanceResponse.ok)throw Error('Katalog oder Herkunft konnte nicht geladen werden');
