@@ -1,5 +1,9 @@
 # Codebasis
 
+### Wiederherstellung nach Buildfehlern
+
+Scheitert die Veröffentlichung eines bereits fertig geschriebenen Builds, wird der letzte vollständige Build zurückverschoben. Scheitert auch diese Wiederherstellung, bleibt der Stage-Ordner mit `previous/` erhalten; die Fehlermeldung nennt den vollständigen Wiederherstellungspfad und enthält beide I/O-Fehler. Er darf erst nach manueller Sicherung/Wiederherstellung entfernt werden. `tests/build-recovery.test.mjs` injiziert Fehler ausschliesslich an den Rename-Grenzen der echten CLI und vergleicht sämtliche Bytes des letzten Builds. Die Zwei-Rename-Übergabe ist nicht absturzatomar.
+
 ## Architektur
 
 Vanilla ESM, Node >=22, keine npm-Abhängigkeiten und keine Laufzeit-Frameworks. Die statische Oberfläche lädt den vollständigen publizierten Katalog und seine Provenienz automatisch vom gleichen Origin. Suche durchsucht immer alle 13 Positionen; nur die DOM-Anzeige ist auf 6 weitere Treffer pro Schritt begrenzt.
