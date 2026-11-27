@@ -59,4 +59,10 @@ test('CSV neutralizes leading-whitespace formulas; fresh notes used without relo
  for(const text of ['=SUM(A1)','   =1','\t+1','\n@A1','-5'])assert.ok(csvCell(text).startsWith('"\''));
  const workspace=plan([line('7301','1','','new "note"; =x')],'1.05');workspace.label='  =HYPERLINK(1)';workspace.notes='fresh';let csv=workspaceCsv(workspace,catalog);assert.ok(csv.includes("'  =HYPERLINK(1)"));assert.ok(csv.includes('new ""note""; =x'));assert.ok(csv.includes('fresh'));
  workspace.notes='replacement';workspace.lines[0].note='';csv=workspaceCsv(workspace,catalog);assert.ok(csv.includes('replacement'));assert.ok(!csv.includes('fresh'));assert.ok(!csv.includes('new ""note'));
+ assert.equal(csv.split('\r\n').length,3); // header, one position, trailing CRLF
+});
+test('CSV keeps collection metadata without inventing a position or amount',()=>{
+ const workspace={...plan([],'1.0500'),label:'  =Titel',notes:'Notiz; "eins"\nzwei'};
+ const [, ...records]=workspaceCsv(workspace,catalog).split('\r\n');
+ assert.deepEqual(records,[`"'  =Titel";"";"";"";"";"";"1.0500";"";"";"Sammlung ohne Positionen";"";"Notiz; ""eins""\nzwei";"physiotherapie-2026";""`,'']);
 });
