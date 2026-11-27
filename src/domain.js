@@ -105,6 +105,7 @@ export function csvCell(value) { let text=String(value); if(/^\s*[=+\-@]/u.test(
 export function workspaceCsv(workspace,catalog) {
   const result=calculate(workspace,catalog);
   const rows=[['Titel','Code','Position','Preisbasis','Quellwert','Anzahl','CHF/TP (eigene Eingabe)','Material CHF je Einheit','Zeilensumme CHF (gerundet)','Status','Zeilennotiz','Gesamtnotiz','Katalog','PDF-Seiten'],...result.lines.map(l=>[workspace.label,l.id,l.position.title,l.position.price.type,l.position.price.value??'',l.quantity,workspace.tpw,l.materialChf,l.cents===null?'':money(l.cents),l.reason||'Rechenwert, keine Vergütungszusage',l.note,workspace.notes,catalog.id,l.position.detailPages.join(',')])];
+  if (!result.lines.length) rows.push([workspace.label,'','','','','',workspace.tpw,'','','Sammlung ohne Positionen','',workspace.notes,catalog.id,'']);
   return '\uFEFF'+rows.map(r=>r.map(csvCell).join(';')).join('\r\n')+'\r\n';
 }
 export function createStorageGuard(storage,catalog) {
